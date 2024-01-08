@@ -56,7 +56,7 @@ def hbnb_state_post():
                                                         """
     if not request.get_json():
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
-    
+
     state_data = request.get_json()
 
     if not state_data.get('name'):
