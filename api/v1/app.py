@@ -33,4 +33,3 @@ if __name__ == '__main__':
     port_var = os.getenv('HBNB_API_PORT', 5000)
 
     app.run(host=host_var, port=port_var, threaded=True)
-
