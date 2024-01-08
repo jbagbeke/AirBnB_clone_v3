@@ -51,6 +51,39 @@ class DBStorage:
                     new_dict[key] = obj
         return (new_dict)
 
+    def get(self, cls, id):
+        """
+            Method to retrieve an object based on ID
+                                                    """
+        if cls and id:
+            the_obj = self.__session.query(cls).filter(cls.id==id).all()
+            
+            if len(the_obj) > 0:
+                return the_obj[0]
+        
+        return None
+
+    def count(self, cls=None):
+        """ Returns the number of instances of a class else the count of all
+                                                                            """
+        if cls:
+            cls_count = self.__session.query(cls).all()
+            return len(cls_count)
+        else:
+            cls_count = 0
+
+            cls_dict = {'State': State,
+                        'City': City,
+                        'Place': Place,
+                        'Amenity': Amenity,
+                        'Review': Review,
+                        'User': User}
+            for cls in cls_dict.keys():
+                tmp = self.__session.query(cls_dict[cls]).all()
+                cls_count += len(tmp)
+            
+            return cls_count
+
     def new(self, obj):
         """add the object to the current database session"""
         self.__session.add(obj)
