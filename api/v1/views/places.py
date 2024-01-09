@@ -83,7 +83,7 @@ def hbnb_place_post(city_id):
     if not place_data.get('name'):
         return make_response(jsonify({'error': 'Missing name'}), 400)
 
-    new_obj = Place(**place_data)
+    new_obj = Place(city_id=cities_objects.id, **place_data)
 
     storage.new(new_obj)
     storage.save()
