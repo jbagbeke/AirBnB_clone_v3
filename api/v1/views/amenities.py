@@ -18,7 +18,7 @@ def hbnb_amenities():
     return jsonify(amenities)
 
 
-@app_views.route('/amenities/amenity_id>',
+@app_views.route('/amenities/<amenity_id>',
                  strict_slashes=False,
                  methods=['GET'])
 def hbnb_amenity_id(amenity_id):
