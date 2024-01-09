@@ -6,6 +6,7 @@ from models import storage
 from flask import Flask, jsonify, render_template
 from flask import make_response
 from api.v1.views import app_views
+from flask_cors import CORS
 import os
 
 # Creating the Flask instance
