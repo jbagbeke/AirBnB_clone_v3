@@ -58,7 +58,9 @@ def hbnb_review_delete(review_id):
     return make_response(jsonify({}), 200)
 
 
-@app_views.route('/places/<place_id>/reviews', strict_slashes=False, methods=['POST'])
+@app_views.route('/places/<place_id>/reviews',
+                 strict_slashes=False,
+                 methods=['POST'])
 def hbnb_review_post(place_id):
     """
         Creates a Review obj with the POST request data
@@ -108,7 +110,11 @@ def hbnb_review_put(review_id):
     review_data = request.get_json()
 
     for key, value in review_data.items():
-        if key not in ['id', 'created_at', 'updated_at', 'place_id', 'user_id']:
+        if key not in ['id',
+                       'created_at',
+                       'updated_at',
+                       'place_id',
+                       'user_id']:
             setattr(review_obj, key, value)
 
     storage.save()
