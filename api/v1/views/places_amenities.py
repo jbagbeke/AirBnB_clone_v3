@@ -41,9 +41,13 @@ def hbnb_amenity_delete(place_id, amenity_id):
         abort(404)
 
     place_amenity_ids = place_obj.amenity_ids
+
+    if amenity_id not in place_amenity_ids:
+        abort(404)
+
     amenity_obj = storage.get(Amenity, amenity_id)
 
-    if not amenity_obj or amenity_id not in place_amenity_ids:
+    if not amenity_obj:
         abort(404)
 
     return jsonify({})
@@ -57,9 +61,13 @@ def hbnb_amenity_post(place_id, amenity_id):
         Link a Amenity object to a Place
                                         """
     place_obj = storage.get(Place, place_id)
+
+    if not place_obj:
+        abort(404)
+
     amenity_obj = storage.get(Amenity, amenity_id)
 
-    if not place_obj or not amenity_obj:
+    if not amenity_obj:
         abort(404)
 
     place_amenity_ids = place_obj.amenity_ids
@@ -67,7 +75,7 @@ def hbnb_amenity_post(place_id, amenity_id):
     if amenity_id in place_amenity_ids:
         return make_response(jsonify(amenity_obj.to_dict()), 200)
 
-    place_obj.amenity_ids.append(amenity_id)
+    place_obj.amenity_ids = place_amenity_ids.append(amenity_id)
     place_obj.amenities = amenity_obj
 
     storage.save()
