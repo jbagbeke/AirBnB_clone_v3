@@ -17,12 +17,12 @@ def hbnb_reviews(place_id):
     """
         Retrieves the list of all Review objects
                                                 """
-    reviews_objects = storage.get(Place, place_id)
+    reviews_obj = storage.get(Place, place_id)
 
-    if not reviews_objects:
+    if not reviews_obj:
         abort(404)
 
-    reviews = [review.to_dict() for review in storage.all(Review).values()]
+    reviews = [review.to_dict() for review in reviews_obj.reviews]
 
     return jsonify(reviews)
 
@@ -86,7 +86,7 @@ def hbnb_review_post(place_id):
     if not review_data.get('text'):
         return make_response(jsonify({'error': 'Missing text'}), 400)
 
-    new_obj = Review(**review_data)
+    new_obj = Review(place_id=place_objects.id, **review_data)
 
     storage.new(new_obj)
     storage.save()
