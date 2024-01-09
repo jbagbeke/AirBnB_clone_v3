@@ -59,9 +59,9 @@ def hbnb_city_post(state_id):
     """
         Creates a City obj with the POST request data
                                                     """
-    state_objects = storage.get(State, state_id)
+    state_obj = storage.get(State, state_id)
         
-    if not state_objects:
+    if not state_obj:
         abort(404)
 
     if not request.get_json():
@@ -72,7 +72,7 @@ def hbnb_city_post(state_id):
     if not city_data.get('name'):
         return make_response(jsonify({'error': 'Missing name'}), 400)
 
-    new_obj = City(**city_data)
+    new_obj = City(state_id=state_obj.id, **city_data)
 
     storage.new(new_obj)
     storage.save()
@@ -101,6 +101,6 @@ def hbnb_city_put(city_id):
 
         setattr(city_obj, key, value)
 
-    storage.save(city_obj)
+    storage.save()
 
     return make_response(jsonify(city_obj.to_dict()), 200)
