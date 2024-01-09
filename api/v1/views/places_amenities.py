@@ -48,6 +48,8 @@ def hbnb_amenity_places(place_id, amenity_id):
         abort(404)
 
     place_obj.amenities.remove(amenity_obj)
+
+    storage.delete(amenity_obj)
     storage.save()
 
     return make_response(jsonify({}), 200)
