@@ -100,11 +100,10 @@ def hbnb_city_put(city_id):
 
     city_data = request.get_json()
 
-    if not city_data.get('name'):
-        return make_response(jsonify({'error': 'Missing name'}), 400)
-
     for key, value in city_data.items():
-        if key == 'id' or key == 'created_at' or key == 'updated_at':
+        if key == 'id' or key == 'created_at':
+            continue
+        if key == 'updated_at' or key == 'state_id':
             continue
 
         setattr(city_obj, key, value)
