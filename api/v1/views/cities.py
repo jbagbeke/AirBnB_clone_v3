@@ -21,7 +21,7 @@ def hbnb_cities(state_id):
     if not state_obj:
         abort(404)
 
-    cities = [city.to_dict() for city in storage.all(City).values()]
+    cities = [city.to_dict() for city in state_obj.cities]
 
     return jsonify(cities)
 
@@ -101,12 +101,8 @@ def hbnb_city_put(city_id):
     city_data = request.get_json()
 
     for key, value in city_data.items():
-        if key == 'id' or key == 'created_at':
-            continue
-        if key == 'updated_at' or key == 'state_id':
-            continue
-
-        setattr(city_obj, key, value)
+        if key not in ['id', 'created_at', 'updated_at', 'state_id']:
+            setattr(city_obj, key, value)
 
     storage.save()
 
