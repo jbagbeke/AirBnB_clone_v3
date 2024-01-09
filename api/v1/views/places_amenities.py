@@ -21,7 +21,6 @@ def hbnb_place_amenity(place_id):
     if not place_obj:
         abort(404)
 
-
     place_amenities = [amenity_obj.to_dict()
                        for amenity_obj in place_obj.amenities]
 
@@ -48,7 +47,7 @@ def hbnb_amenity_places(place_id, amenity_id):
     if amenity_obj not in place_obj.amenities:
         abort(404)
 
-    storage.delete(amenity_obj)
+    place_obj.amenities.remove(amenity_obj)
     storage.save()
 
     return make_response(jsonify({}), 200)
