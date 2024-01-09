@@ -17,11 +17,11 @@ def hbnb_places(city_id):
     """
         Retrieves the list of all Place objects
                                                 """
-    cities_objects = storage.get(City, city_id)
-    if not cities_objects:
+    city_obj = storage.get(City, city_id)
+    if not city_obj:
         abort(404)
 
-    places = [place.to_dict() for place in storage.all(Place).values()]
+    places = [place.to_dict() for place in city_obj.places]
 
     return jsonify(places)
 
