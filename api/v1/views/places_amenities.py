@@ -48,6 +48,9 @@ def hbnb_amenity_places(place_id, amenity_id):
     if amenity_obj not in place_obj.amenities:
         abort(404)
 
+    storage.delete(amenity_obj)
+    storage.save()
+
     return make_response(jsonify({}), 200)
 
 
