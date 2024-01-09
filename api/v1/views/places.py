@@ -97,7 +97,6 @@ def hbnb_place_put(place_id):
         Updates a place with specified ID if it exists
                                                                     """
     place_obj = storage.get(Place, place_id)
-
     if not place_obj:
         abort(404)
 
@@ -105,7 +104,6 @@ def hbnb_place_put(place_id):
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     place_data = request.get_json()
-
     for key, value in place_data.items():
         if key not in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
             setattr(place_obj, key, value)
