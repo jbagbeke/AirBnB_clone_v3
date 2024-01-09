@@ -9,7 +9,9 @@ from models.city import City
 from models.state import State
 
 
-@app_views.route('/states/<state_id>/cities', strict_slashes=False, methods=['GET'])
+@app_views.route('/states/<state_id>/cities',
+                 strict_slashes=False,
+                 methods=['GET'])
 def hbnb_cities(state_id):
     """
         Retrieves the list of all City objects
@@ -54,13 +56,15 @@ def hbnb_city_delete(city_id):
     return make_response(jsonify({}), 200)
 
 
-@app_views.route('/states/<state_id>/cities', strict_slashes=False, methods=['POST'])
+@app_views.route('/states/<state_id>/cities',
+                 strict_slashes=False,
+                 methods=['POST'])
 def hbnb_city_post(state_id):
     """
         Creates a City obj with the POST request data
                                                     """
     state_obj = storage.get(State, state_id)
-        
+
     if not state_obj:
         abort(404)
 
@@ -91,7 +95,7 @@ def hbnb_city_put(city_id):
         abort(404)
 
     if not request.get_json():
-        return make_response(jsonify({'Not a JSON'}), 400)
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     city_data = request.get_json()
 
