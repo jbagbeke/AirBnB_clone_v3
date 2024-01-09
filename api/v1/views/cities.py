@@ -16,8 +16,9 @@ def hbnb_cities(state_id):
     """
         Retrieves the list of all City objects
                                                 """
-    state_objects = storage.get(State, state_id)
-    if not state_objects:
+    state_obj = storage.get(State, state_id)
+
+    if not state_obj:
         abort(404)
 
     cities = [city.to_dict() for city in storage.all(City).values()]
@@ -98,6 +99,9 @@ def hbnb_city_put(city_id):
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     city_data = request.get_json()
+
+    if not city_data.get('name'):
+        return make_response(jsonify({'error': 'Missing name'}), 400)
 
     for key, value in city_data.items():
         if key == 'id' or key == 'created_at' or key == 'updated_at':
