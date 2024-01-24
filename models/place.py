@@ -36,9 +36,14 @@ class Place(BaseModel, Base):
 
         user = relationship('User', back_populates='places')
         cities = relationship('City', back_populates='places')
-        reviews = relationship('Review', back_populates='place', cascade='all, delete')
+        reviews = relationship('Review',
+                               back_populates='place',
+                               cascade='all, delete')
 
-        amenities = relationship('Amenity', secondary=place_amenity, viewonly=False, back_populates='place_amenities')
+        amenities = relationship('Amenity',
+                                 secondary=place_amenity,
+                                 viewonly=False,
+                                 back_populates='place_amenities')
     else:
         city_id = ""
         user_id = ""
@@ -55,7 +60,7 @@ class Place(BaseModel, Base):
     if os.environ.get('HBNB_TYPE_STORAGE') != 'db':
         @property
         def reviews(self):
-            """ Returns the list of Review instances with place_id = Place.id """
+            """Returns list of Review instances with place_id = Place.id"""
 
             from models import storage
 
@@ -64,14 +69,14 @@ class Place(BaseModel, Base):
 
         @property
         def amenities(self):
-            """ Returns the list of Amenity instances based on the attribute amenity_ids """
+            """ Returns list of Amenity instance on the attr amenity_ids """
 
             objs = storage.all('Amenity')
             return [obj for obj in objs if obj.id in self.amenity_ids]
-        
+
         @amenities.setter
         def amenities(self, obj=None):
-            """ Handles append method for adding an Amenity.id to the attribute amenity_ids """
+            """ Handles append for adding Amenity.id to attr amenity_ids """
 
             if obj and type(obj).__name__ == 'Amenity':
                 self.amenity_ids.append(obj.id)

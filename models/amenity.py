@@ -16,6 +16,8 @@ class Amenity(BaseModel, Base):
     if os.environ.get("HBNB_TYPE_STORAGE") == "db":
         name = Column(String(128), nullable=False)
 
-        place_amenities = relationship('Place', secondary=place_amenity, back_populates='amenities')
+        place_amenities = relationship('Place',
+                                       secondary=place_amenity,
+                                       back_populates='amenities')
     else:
         name = ""
