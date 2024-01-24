@@ -41,7 +41,7 @@ def hbnb_amenity_places(place_id, amenity_id):
 
     amenity_obj = storage.get(Amenity, amenity_id)
 
-    if amenity_obj:
+    if not amenity_obj:
         abort(404)
 
     if amenity_obj not in place_obj.amenities:
