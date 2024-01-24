@@ -5,6 +5,7 @@ from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer, DateTime
 import hashlib
+import os
 
 Base = declarative_base()
 
@@ -73,7 +74,7 @@ class BaseModel:
         if "_sa_instance_state" in dictionary.keys():
             del dictionary["_sa_instance_state"]
 
-        if os.getenv("HBNB_TYPE_STORAGE") == db:
+        if os.getenv("HBNB_TYPE_STORAGE") == 'db':
             del dictionary['password']
 
         return dictionary
