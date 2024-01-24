@@ -38,6 +38,12 @@ class BaseModel:
             del kwargs['__class__']
             
             for key, value in kwargs.items():
+                if key == 'password':
+                    hash_obj = hashlib.md5()
+                    hash_obj.update(value.encode('utf-8'))
+
+                    value = hash_obj.hexdigest()
+
                 setattr(self, key, value)
 
             self.__dict__.update(kwargs)
