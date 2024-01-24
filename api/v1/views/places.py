@@ -8,6 +8,8 @@ from models import storage
 from models.place import Place
 from models.city import City
 from models.user import User
+from models.state import State
+from models.amenity import Amenity
 
 
 @app_views.route('/cities/<city_id>/places',
@@ -111,3 +113,71 @@ def hbnb_place_put(place_id):
     storage.save()
 
     return make_response(jsonify(place_obj.to_dict()), 200)
+
+
+@app_views.route('/places_search', strict_slashes=False, methods=['POST'])
+def places_search():
+    """
+        Retrieves all Place objects depending on JSON in the body of request
+                                                                            """
+    if not request.get_json():
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+
+    request_data = request.get_json()
+    state_ids = request_data.get('states', None)
+    city_ids = request_data.get('cities', None)
+    amenity_ids = request_data.get('amenities', None)
+
+    if not state_ids and not city_ids and not amenity_ids:
+        place_objs = storage.all(Place)
+        return jsonify(place_objs)
+
+    if len(request_data) == 0:
+        place_objs = storage.all(Place)
+        return jsonify(place_objs)
+
+    search_list = []
+
+    if state_ids:
+        state_objs = [storage.get(State, id) for id in state_ids
+                      if storage.get(State, id)]
+
+        for state_obj in state_objs:
+            state_cities = state_obj.cities
+
+            for state_city in state_cities:
+                city_places = state_city.places
+
+            for city_place in city_places:
+                if amenity_ids:
+                    if all(id in city_place.amenity_ids for id in amenity_ids):
+                        search_list.append(city_place.to_dict())
+                else:
+                    search_list.append(city_place.to_dict())
+
+    if city_ids:
+        if state_ids:
+            city_objs = [storage.get(City, id) for id in city_ids
+                         if id not in state_ids and storage.get(City, id)]
+        else:
+            city_objs = [storage.get(City, id) for id in city_ids
+                         if storage.get(City, id)]
+
+        for city_obj in city_objs:
+            city_places = city_obj.places
+
+            for city_place in city_places:
+                if amenity_ids:
+                    if all(id in city_place.amenity_ids for id in amenity_ids):
+                        search_list.append(city_place.to_dict())
+                else:
+                    search_list.append(city_place.to_dict())
+
+    if amenity_ids and not city_ids and not state_ids:
+        place_objs = storage.all(Place)
+
+        for place_obj in place_objs:
+            if all(id in place_obj.amenity_ids for id in amenity_ids):
+                search_list.append(place_obj.to_dict())
+
+    return jsonify(search_list)
