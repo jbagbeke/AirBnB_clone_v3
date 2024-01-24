@@ -4,6 +4,7 @@ import uuid
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer, DateTime
+import hashlib
 
 Base = declarative_base()
 
@@ -22,7 +23,13 @@ class BaseModel:
             self.updated_at = datetime.now()
 
             for key, value in kwargs.items():
-               setattr(self, key, value)
+                if key == 'password':
+                    hash_obj = hashlib.md5()
+                    hash_obj.update(value.encode('utf-8'))
+
+                    value = hash_obj.hexdigest()
+
+                setattr(self, key, value)
         else:
             kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
@@ -59,6 +66,9 @@ class BaseModel:
 
         if "_sa_instance_state" in dictionary.keys():
             del dictionary["_sa_instance_state"]
+
+        if os.getenv("HBNB_TYPE_STORAGE") == db:
+            del dictionary['password']
 
         return dictionary
 
