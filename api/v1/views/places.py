@@ -130,11 +130,13 @@ def places_search():
 
     if not state_ids and not city_ids and not amenity_ids:
         place_objs = storage.all(Place)
-        return jsonify(place_objs)
+        all_list = [place_obj.to_dict() for place_obj in place_objs.values()]
+        return jsonify(all_list)
 
     if len(request_data) == 0:
         place_objs = storage.all(Place)
-        return jsonify(place_objs)
+        all_list = [place_obj.to_dict() for place_obj in place_objs.values()]
+        return jsonify(all_list)
 
     search_list = []
 
@@ -158,7 +160,7 @@ def places_search():
     if city_ids:
         if state_ids:
             city_objs = [storage.get(City, id) for id in city_ids
-                         if id not in state_ids and storage.get(City, id)]
+                         if not id in state_ids and storage.get(City, id)]
         else:
             city_objs = [storage.get(City, id) for id in city_ids
                          if storage.get(City, id)]
