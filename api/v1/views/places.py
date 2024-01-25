@@ -125,9 +125,10 @@ def places_search():
 
     request_data = request.get_json()
 
-    request_states = request_data.get('states', None)
-    request_cities = request_data.get('cities', None)
-    request_amenities = request_data.get('amenities', None)
+    if request_data:
+        request_states = request_data.get('states', None)
+        request_cities = request_data.get('cities', None)
+        request_amenities = request_data.get('amenities', None)
 
     search_list = []
     place_objects = []
