@@ -167,6 +167,4 @@ def places_search():
     else:
         search_list = [place_obj.to_dict() for place_obj in place_objects]
 
-    search_names = [obj.name for obj in place_objects]
-
-    return jsonify(search_list)
+    return make_response(jsonify(search_list), 200)

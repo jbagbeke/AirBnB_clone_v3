@@ -82,7 +82,7 @@ class BaseModel:
             del dictionary["_sa_instance_state"]
 
         if os.getenv("HBNB_TYPE_STORAGE") == 'db':
-            del dictionary['password']
+            dictionary.pop('password', None)
 
         return dictionary
 
