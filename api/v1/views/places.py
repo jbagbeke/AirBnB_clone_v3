@@ -158,7 +158,7 @@ def places_search():
 
     if request_amenities:
         if not request_states and not request_cities:
-            place_objects = storage.all(Place)
+            place_objects = storage.all(Place).values()
 
         if len(place_objects):
             amenity_objs = [storage.get(Amenity, id)
