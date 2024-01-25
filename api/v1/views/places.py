@@ -132,7 +132,7 @@ def places_search():
            not state_ids and not city_ids and not amenity_ids):
         place_objs = storage.all(Place)
         all_list = [place_obj.to_dict() for place_obj in place_objs.values()]
-        return jsonify(all_list)
+        return all_list
 
     search_list = []
 
