@@ -128,12 +128,8 @@ def places_search():
     city_ids = request_data.get('cities', None)
     amenity_ids = request_data.get('amenities', None)
 
-    if not state_ids and not city_ids and not amenity_ids:
-        place_objs = storage.all(Place)
-        all_list = [place_obj.to_dict() for place_obj in place_objs.values()]
-        return jsonify(all_list)
-
-    if not request_data or not len(request_data):
+    if not len(request_data) or not request_data or (
+           not state_ids and not city_ids and not amenity_ids):
         place_objs = storage.all(Place)
         all_list = [place_obj.to_dict() for place_obj in place_objs.values()]
         return jsonify(all_list)
