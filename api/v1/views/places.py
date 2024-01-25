@@ -132,9 +132,9 @@ def places_search():
     search_list = []
     place_objects = []
 
-    if not len(request_data) or (not request_states and
-                                 not request_cities and
-                                 not request_amenities):
+    if not request_data or not len(request_data) or (not request_states and
+                                                     not request_cities and
+                                                     not request_amenities):
         place_objs = storage.all(Place).values()
         all_places_list = [place_obj.to_dict() for place_obj in place_objs]
 
