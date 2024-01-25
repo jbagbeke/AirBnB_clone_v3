@@ -133,7 +133,7 @@ def places_search():
         all_list = [place_obj.to_dict() for place_obj in place_objs.values()]
         return jsonify(all_list)
 
-    if len(request_data) == 0:
+    if not request_data or not len(request_data):
         place_objs = storage.all(Place)
         all_list = [place_obj.to_dict() for place_obj in place_objs.values()]
         return jsonify(all_list)
@@ -145,17 +145,13 @@ def places_search():
                       if storage.get(State, id)]
 
         for state_obj in state_objs:
-            state_cities = state_obj.cities
-
-            for state_city in state_cities:
-                city_places = state_city.places
-
-            for city_place in city_places:
-                if amenity_ids:
-                    if all(id in city_place.amenity_ids for id in amenity_ids):
+            for state_city in state_obj.cities:
+                for city_place in state_city.places:
+                    if amenity_ids:
+                        if all(id in city_place.amenity_ids for id in amenity_ids):
+                            search_list.append(city_place.to_dict())
+                    else:
                         search_list.append(city_place.to_dict())
-                else:
-                    search_list.append(city_place.to_dict())
 
     if city_ids:
         if state_ids:
@@ -166,16 +162,14 @@ def places_search():
                          if storage.get(City, id)]
 
         for city_obj in city_objs:
-            city_places = city_obj.places
-
-            for city_place in city_places:
+            for city_place in city_obj.places:
                 if amenity_ids:
                     if all(id in city_place.amenity_ids for id in amenity_ids):
                         search_list.append(city_place.to_dict())
                 else:
                     search_list.append(city_place.to_dict())
 
-    if amenity_ids and not city_ids and not state_ids:
+    if amenity_ids and len(search_list) == 0:
         place_objs = storage.all(Place)
 
         for place_obj in place_objs:
