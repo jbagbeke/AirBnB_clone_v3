@@ -158,12 +158,16 @@ def places_search():
 
     if request_amenities:
         if len(place_objects):
-            amenity_objs = [storage.get(Amenity, id) for id in request_amenities]
-
-            for place_obj in place_objects:
-                if all(amenity_obj in place_obj.amenities
-                                   for amenity_obj in amenity_objs):
-                    search_list.append(place_obj.to_dict())
+            amenity_objs = [storage.get(Amenity, id)
+                            for id in request_amenities]
+            
+            if len(amenity_objs):
+                for place_obj in place_objects:
+                    if all(amenity_obj in place_obj.amenities
+                                      for amenity_obj in amenity_objs):
+                        place_dict = place_obj.to_dict()
+                        del place_dict['amenities']
+                        search_list.append(place_dict)
     else:
         search_list = [place_obj.to_dict() for place_obj in place_objects]
 
