@@ -137,10 +137,9 @@ def places_search():
                                  not request_amenities):
         place_objs = storage.all(Place).values()
         all_places_list = [place_obj.to_dict() for place_obj in place_objs]
-        print('\n\n', len(all_places_list), '\n\n')
+
         return jsonify(all_places_list)
 
-    print("\n\nNOT RIGHT\n\n")
     if request_states:
         state_objs = [storage.get(State, id) for id in request_states]
 
@@ -169,6 +168,5 @@ def places_search():
         search_list = [place_obj.to_dict() for place_obj in place_objects]
 
     search_names = [obj.name for obj in place_objects]
-    print(len(search_list))
-    print('\n', search_names, '\n')
+
     return jsonify(search_list)
